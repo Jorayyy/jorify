@@ -65,6 +65,7 @@ type Props = {
   shipping: Method[];
   zones: Zone[];
   paymentProviders: string[];
+  activeProvider: string;
   initialTab: string;
 };
 
@@ -127,6 +128,7 @@ export function SettingsClient({
   shipping,
   zones,
   paymentProviders,
+  activeProvider,
   initialTab,
 }: Props) {
   const branding = obj(settings.branding);
@@ -173,7 +175,7 @@ export function SettingsClient({
       </TabsContent>
 
       <TabsContent value="payments">
-        <PaymentsSection paymentProviders={paymentProviders} />
+        <PaymentsSection paymentProviders={paymentProviders} activeProvider={activeProvider} />
       </TabsContent>
 
       <TabsContent value="shipping">
@@ -470,7 +472,7 @@ function CheckoutForm({
   );
 }
 
-function PaymentsSection({ paymentProviders }: { paymentProviders: string[] }) {
+function PaymentsSection({ paymentProviders, activeProvider }: { paymentProviders: string[]; activeProvider: string }) {
   return (
     <Card>
       <CardHeader>
@@ -482,15 +484,17 @@ function PaymentsSection({ paymentProviders }: { paymentProviders: string[] }) {
             <Badge>No providers available</Badge>
           ) : (
             paymentProviders.map((provider) => (
-              <Badge key={provider} tone="default">
+              <Badge key={provider} tone={provider === activeProvider ? "success" : "info"}>
                 {provider}
+                {provider === activeProvider ? " (active)" : ""}
               </Badge>
             ))
           )}
         </div>
         <p className="text-sm text-zinc-500">
-          Payment methods are configured by the platform, not per store. This environment records payments manually —
-          use “Mark paid” on an order once money is received (cash, GCash, bank transfer).
+          {activeProvider === "manual"
+            ? "Payment methods are configured by the platform, not per store. This environment records payments manually — use “Mark paid” on an order once money is received (cash, GCash, bank transfer)."
+            : `Checkout is processed by ${activeProvider}. Orders are marked paid automatically when the payment provider confirms the transaction.`}
         </p>
       </CardContent>
     </Card>

@@ -27,7 +27,9 @@ npm run dev
 | --- | --- |
 | `DATABASE_URL` | Neon/Postgres connection string (`?sslmode=require`) |
 | `AUTH_SECRET` | Session signing (`openssl rand -base64 32`) |
-| `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` | Optional — payments show "not configured" until set |
+| `PAYMENT_PROVIDER` | `manual` (default), `paymongo`, or `stripe` |
+| `PAYMONGO_SECRET_KEY` / `PAYMONGO_WEBHOOK_SECRET` | PayMongo test (`sk_test_…`) key + webhook endpoint secret |
+| `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` | Optional Stripe keys |
 | `BLOB_READ_WRITE_TOKEN` | Optional — Vercel Blob for image uploads |
 
 `.env*` is gitignored. Never commit real secrets.
@@ -74,11 +76,13 @@ npm test
 - `tests/tenant-isolation.test.ts` — **critical**: runs against the live database and proves tenant A can never read tenant B's stores, products, or orders (skip automatically if `DATABASE_URL` is unset).
 - `tests/permissions.test.ts` — role → permission rules.
 - `tests/discounts.test.ts` — discount math and money formatting.
+- `tests/paymongo-signature.test.ts` — webhook signature/timestamp verification.
 
 ## Deployment (Vercel)
 
 1. Push this repo to GitHub.
 2. Create a Neon project, copy the connection string.
-3. In Vercel: import the repo, set `DATABASE_URL`, `AUTH_SECRET` (and optional Stripe/Blob vars).
-4. Locally or in a CI step: `npm run db:migrate` against production (or wire `db:migrate` into the build).
-5. Custom domains: add the domain in the admin (Settings → Domains), point DNS at Vercel. Domain verification and auto-SSL display as "pending" until a verification endpoint is implemented.
+3. In Vercel: import the repo, set `DATABASE_URL`, `AUTH_SECRET`, `PAYMENT_PROVIDER=paymongo`, `PAYMONGO_SECRET_KEY`, `PAYMONGO_WEBHOOK_SECRET` (and optional Blob vars).
+4. PayMongo dashboard → Developers → Webhooks: add endpoint `https://<your-domain>/api/webhooks/paymongo` subscribing to `checkout_session.payment.paid`; copy its signing secret into `PAYMONGO_WEBHOOK_SECRET`.
+5. Locally or in a CI step: `npm run db:migrate` against production (or wire `db:migrate` into the build).
+6. Custom domains: add the domain in the admin (Settings → Domains), point DNS at Vercel. Domain verification and auto-SSL display as "pending" until a verification endpoint is implemented.

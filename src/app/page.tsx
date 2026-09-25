@@ -5,7 +5,7 @@ const features = [
   { icon: Store, title: "Multi-tenant by design", body: "Every business gets isolated data, roles and settings from day one." },
   { icon: Boxes, title: "Flexible catalog", body: "Products, services, custom variant attributes and a real inventory ledger." },
   { icon: Palette, title: "No-code storefront", body: "Compose pages from JSON sections, theme colors and typography." },
-  { icon: CreditCard, title: "Pluggable payments", body: "A provider abstraction with Stripe and manual payments today." },
+  { icon: CreditCard, title: "Pluggable payments", body: "A provider abstraction with PayMongo, Stripe and manual payments." },
   { icon: Users, title: "Employees & permissions", body: "Owner, admin, manager, staff and viewer with server-side checks." },
   { icon: ShieldCheck, title: "Production foundations", body: "Audit logs, structured errors, entitlements and tenant isolation tests." },
 ];

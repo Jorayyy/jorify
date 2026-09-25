@@ -1,3 +1,4 @@
+import { paymongoProvider } from "./paymongo";
 import { stripeProvider } from "./stripe";
 import type { PaymentProvider } from "./types";
 
@@ -14,9 +15,13 @@ const manualProvider: PaymentProvider = {
 export function getPaymentProvider(): PaymentProvider {
   const configured = process.env.PAYMENT_PROVIDER ?? "manual";
   if (configured === "stripe" && process.env.STRIPE_SECRET_KEY) return stripeProvider;
+  if (configured === "paymongo" && process.env.PAYMONGO_SECRET_KEY) return paymongoProvider;
   return manualProvider;
 }
 
 export function availablePaymentProviders(): string[] {
-  return process.env.STRIPE_SECRET_KEY ? ["manual", "stripe"] : ["manual"];
+  const providers = ["manual"];
+  if (process.env.STRIPE_SECRET_KEY) providers.push("stripe");
+  if (process.env.PAYMONGO_SECRET_KEY) providers.push("paymongo");
+  return providers;
 }

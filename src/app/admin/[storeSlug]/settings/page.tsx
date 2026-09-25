@@ -1,5 +1,5 @@
 import { PageHeader } from "@/components/page-header";
-import { availablePaymentProviders } from "@/lib/payments";
+import { availablePaymentProviders, getPaymentProvider } from "@/lib/payments";
 import { listDeliveryZones, listShippingMethods } from "@/lib/services/fulfillment";
 import { getSettings, listDomains } from "@/lib/services/settings";
 import { requireStoreContext } from "@/lib/tenancy/context";
@@ -49,6 +49,7 @@ export default async function SettingsPage({
         shipping={shipping}
         zones={zones}
         paymentProviders={availablePaymentProviders()}
+        activeProvider={getPaymentProvider().key}
         initialTab={sp.tab ?? "general"}
       />
     </div>
