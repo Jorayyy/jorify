@@ -1,69 +1,79 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Boxes, CreditCard, Palette, ShieldCheck, Store, Users } from "lucide-react";
 
-export default function Home() {
+const features = [
+  { icon: Store, title: "Multi-tenant by design", body: "Every business gets isolated data, roles and settings from day one." },
+  { icon: Boxes, title: "Flexible catalog", body: "Products, services, custom variant attributes and a real inventory ledger." },
+  { icon: Palette, title: "No-code storefront", body: "Compose pages from JSON sections, theme colors and typography." },
+  { icon: CreditCard, title: "Pluggable payments", body: "A provider abstraction with Stripe and manual payments today." },
+  { icon: Users, title: "Employees & permissions", body: "Owner, admin, manager, staff and viewer with server-side checks." },
+  { icon: ShieldCheck, title: "Production foundations", body: "Audit logs, structured errors, entitlements and tenant isolation tests." },
+];
+
+export default function LandingPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-white text-zinc-900">
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+        <div className="flex items-center gap-2 text-sm font-semibold tracking-tight">
+          <span className="flex h-6 w-6 items-center justify-center rounded bg-zinc-900 text-xs text-white">J</span>
+          Jorify
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <nav className="flex items-center gap-2">
+          <Link
+            href="/login"
+            className="inline-flex h-9 items-center rounded-md px-4 text-sm font-medium text-zinc-700 hover:bg-zinc-100"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Sign in
+          </Link>
+          <Link
+            href="/register"
+            className="inline-flex h-9 items-center rounded-md bg-zinc-900 px-4 text-sm font-medium text-white hover:bg-zinc-800"
           >
-            Documentation
-          </a>
+            Start free
+          </Link>
+        </nav>
+      </header>
+
+      <section className="mx-auto max-w-6xl px-6 pb-20 pt-14">
+        <p className="mb-3 text-xs font-medium uppercase tracking-widest text-zinc-500">
+          Business operating platform with commerce
+        </p>
+        <h1 className="max-w-3xl text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+          Run a retail shop, bakery, salon or restaurant on one configurable platform.
+        </h1>
+        <p className="mt-5 max-w-2xl text-base text-zinc-600">
+          Jorify adapts to the business type you choose: catalog, orders, appointments, delivery, analytics and a
+          customizable storefront — enabled per store, not hard-coded.
+        </p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link
+            href="/register"
+            className="inline-flex h-10 items-center rounded-md bg-emerald-600 px-5 text-sm font-medium text-white hover:bg-emerald-500"
+          >
+            Create your store
+          </Link>
+          <Link
+            href="/login"
+            className="inline-flex h-10 items-center rounded-md border border-zinc-300 px-5 text-sm font-medium hover:bg-zinc-50"
+          >
+            Sign in
+          </Link>
         </div>
-      </main>
-    </div>
+
+        <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((feature) => (
+            <div key={feature.title} className="rounded-lg border border-zinc-200 p-5">
+              <feature.icon className="mb-3 h-5 w-5 text-zinc-900" />
+              <h2 className="text-sm font-semibold">{feature.title}</h2>
+              <p className="mt-1 text-sm text-zinc-600">{feature.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <footer className="border-t border-zinc-100 py-8 text-center text-xs text-zinc-500">
+        Jorify — demo platform. Seed data is clearly marked as demo data.
+      </footer>
+    </main>
   );
 }
