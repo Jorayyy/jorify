@@ -55,6 +55,7 @@ type DemoStore = {
   slug: string;
   businessType: string;
   description: string;
+  promo: string;
   attributes: { name: string; values: string[] }[];
   categories: string[];
   products: DemoProduct[];
@@ -73,13 +74,22 @@ const DEMO_STORES: DemoStore[] = [
     slug: "generation-bread",
     businessType: "bakery",
     description: "Freshly baked sourdough, pandesal and pastries every morning.",
+    promo: "Pre-order by 4PM for same-day pickup · Free delivery within the city on orders over ₱1,500",
     attributes: [{ name: "Size", values: ['6"', '10"', '14"'] }],
-    categories: ["Breads", "Pastries", "Bundles"],
+    categories: ["Breads", "Pastries", "Bundles", "Drinks"],
     products: [
       { name: "Sourdough Loaf", slug: "sourdough-loaf", price: 32000, compareAt: 38000, category: "Breads", description: "48-hour fermented country loaf with a blistered crust.", featured: true, stock: 24, tags: ["fresh"] },
-      { name: "Pandesal (12 pcs)", slug: "pandesal-12", price: 18000, category: "Breads", description: "Soft Filipino breakfast rolls, baked to order.", stock: 40, tags: ["bestseller"] },
+      { name: "Pandesal (12 pcs)", slug: "pandesal-12", price: 18000, category: "Breads", description: "Soft Filipino breakfast rolls, baked to order.", featured: true, stock: 40, tags: ["bestseller"] },
       { name: "Ensaymada", slug: "ensaymada", price: 9500, category: "Pastries", description: "Buttery brioche roll with cheese and buttercream.", stock: 30 },
       { name: "Baker's Bundle", slug: "bakers-bundle", price: 59900, compareAt: 69000, category: "Bundles", description: "One loaf, six pandesal and two ensaymadas.", featured: true, stock: 12 },
+      { name: "Spanish Bread (6 pcs)", slug: "spanish-bread-6", price: 12000, category: "Breads", description: "Soft rolls with a sweet buttery filling, baked fresh daily.", stock: 35 },
+      { name: "Cheese Roll (6 pcs)", slug: "cheese-roll-6", price: 14500, category: "Breads", description: "Fluffy rolls topped with a golden cheese crown.", stock: 28 },
+      { name: "Pandesal Bucket (24 pcs)", slug: "pandesal-bucket-24", price: 32000, category: "Bundles", description: "Half a dozen pandesal packs — perfect for the whole family.", stock: 15 },
+      { name: "Cinnamon Roll", slug: "cinnamon-roll", price: 9500, category: "Pastries", description: "Sticky cinnamon swirl with cream cheese glaze.", featured: true, stock: 24, tags: ["new"] },
+      { name: "Brownie Slab (8×8)", slug: "brownie-slab", price: 32000, category: "Pastries", description: "Fudgy dark chocolate brownie cut to share.", stock: 10 },
+      { name: "Crinkles (12 pcs)", slug: "crinkles-12", price: 18000, category: "Pastries", description: "Powdered-sugar chocolate crinkles, chewy in the middle.", stock: 20 },
+      { name: "Cold Brew Bottle (1L)", slug: "cold-brew-bottle-1l", price: 16500, category: "Drinks", description: "Smooth 18-hour cold brew concentrate. Serve over ice.", stock: 18 },
+      { name: "Barako Brew (1L)", slug: "barako-brew-1l", price: 17500, category: "Drinks", description: "Strong Batangas liberica coffee, ready to pour.", stock: 12 },
     ],
     customers: [
       { first: "Maria", last: "Santos", email: "maria.santos@example.com", phone: "+639171234567" },
@@ -95,11 +105,12 @@ const DEMO_STORES: DemoStore[] = [
     slug: "sample-clothing",
     businessType: "fashion",
     description: "Everyday essentials cut for the Philippine climate.",
+    promo: "Free nationwide shipping on orders ₱1,499+ · Easy 7-day exchanges",
     attributes: [
       { name: "Size", values: ["XS", "S", "M", "L", "XL"] },
       { name: "Color", values: ["Black", "White", "Navy"] },
     ],
-    categories: ["Tops", "Outerwear", "Bottoms"],
+    categories: ["Tops", "Outerwear", "Bottoms", "Accessories"],
     products: [
       {
         name: "Classic Cotton Tee",
@@ -119,6 +130,14 @@ const DEMO_STORES: DemoStore[] = [
       },
       { name: "Oversized Denim Jacket", slug: "oversized-denim-jacket", price: 249900, category: "Outerwear", description: "Washed denim with a boxy cut.", featured: true, stock: 10, tags: ["new"] },
       { name: "Pleated Chinos", slug: "pleated-chinos", price: 159900, category: "Bottoms", description: "Tapered chinos in stone cotton twill.", stock: 16 },
+      { name: "Linen Button-Down", slug: "linen-button-down", price: 129900, category: "Tops", description: "Breathable pure linen, cut relaxed for warm weather.", featured: true, stock: 14, tags: ["bestseller"] },
+      { name: "Ribbed Tank Top", slug: "ribbed-tank-top", price: 49900, compareAt: 69900, category: "Tops", description: "Stretch ribbed cotton in everyday neutrals.", stock: 25 },
+      { name: "Knit Polo", slug: "knit-polo", price: 109900, category: "Tops", description: "Fine-gauge knit polo that holds its shape.", stock: 18 },
+      { name: "Cargo Pants", slug: "cargo-pants", price: 179900, category: "Bottoms", description: "Six-pocket ripstop cargos with a tapered leg.", featured: true, stock: 12 },
+      { name: "Chino Shorts", slug: "chino-shorts", price: 89900, category: "Bottoms", description: "9-inch inseam shorts in cotton twill.", stock: 20 },
+      { name: "Bucket Hat", slug: "bucket-hat", price: 59900, category: "Accessories", description: "Washed cotton bucket hat with a packable brim.", stock: 22 },
+      { name: "Canvas Tote", slug: "canvas-tote", price: 69900, category: "Accessories", description: "Heavyweight canvas tote with interior pocket.", stock: 30 },
+      { name: "Crew Socks (3-pack)", slug: "crew-socks-3-pack", price: 39900, category: "Accessories", description: "Cushioned combed-cotton socks in white, black and gray.", stock: 40 },
     ],
     customers: [
       { first: "Bea", last: "Lim", email: "bea.lim@example.com", phone: "+639175556666" },
@@ -134,6 +153,7 @@ const DEMO_STORES: DemoStore[] = [
     slug: "sample-cafe",
     businessType: "cafe",
     description: "Single-origin coffee and all-day breakfast.",
+    promo: "Order ahead and skip the morning line · New: Matcha series now available",
     attributes: [
       { name: "Size", values: ["Small", "Medium", "Large"] },
       { name: "Milk", values: ["Regular", "Oat", "Almond"] },
@@ -155,6 +175,14 @@ const DEMO_STORES: DemoStore[] = [
       { name: "Cold Brew Tonic", slug: "cold-brew-tonic", price: 17500, category: "Coffee", description: "18-hour cold brew over tonic and citrus.", stock: 999 },
       { name: "Butter Croissant", slug: "butter-croissant", price: 9500, category: "Pastries", description: "Laminated daily.", stock: 18 },
       { name: "Garlic Chicken Rice Bowl", slug: "garlic-chicken-rice", price: 14900, category: "Meals", description: "Garlic rice, fried chicken thigh, fried egg.", stock: 25 },
+      { name: "Americano", slug: "americano", price: 12000, category: "Coffee", description: "Double espresso over hot or iced water.", stock: 999 },
+      { name: "Mocha", slug: "mocha", price: 18000, category: "Coffee", description: "Espresso, steamed milk and house chocolate.", featured: true, stock: 999 },
+      { name: "Matcha Latte", slug: "matcha-latte", price: 19000, category: "Coffee", description: "Ceremonial-grade matcha with your choice of milk.", featured: true, stock: 999, tags: ["new"] },
+      { name: "Hot Chocolate", slug: "hot-chocolate", price: 15000, category: "Coffee", description: "Dark chocolate melted into steamed milk.", stock: 999 },
+      { name: "Banana Bread", slug: "banana-bread", price: 11000, category: "Pastries", description: "Moist loaf with a caramelized sugar crust.", stock: 14 },
+      { name: "Fudge Brownie", slug: "fudge-brownie", price: 9500, category: "Pastries", description: "Dense fudge brownie with sea salt.", stock: 16 },
+      { name: "Chicken Sandwich", slug: "chicken-sandwich", price: 19500, category: "Meals", description: "Buttermilk chicken, slaw and pickles on brioche.", featured: true, stock: 12 },
+      { name: "Beef Tapa Bowl", slug: "beef-tapa-bowl", price: 17500, category: "Meals", description: "House-cured tapa, garlic rice and fried egg.", stock: 15 },
     ],
     customers: [
       { first: "Paolo", last: "Mendoza", email: "paolo.mendoza@example.com", phone: "+639170001111" },
@@ -168,16 +196,25 @@ const DEMO_STORES: DemoStore[] = [
     slug: "sample-pet-shop",
     businessType: "pet_shop",
     description: "Pet food, grooming and wellness for city pets.",
+    promo: "Same-day delivery within the city · Free grooming consult with every ₱2,000 order",
     attributes: [
       { name: "Size", values: ["Small", "Medium", "Large"] },
       { name: "Flavor", values: ["Chicken", "Beef", "Fish"] },
     ],
-    categories: ["Food", "Toys", "Grooming"],
+    categories: ["Food", "Toys", "Grooming", "Accessories"],
     products: [
       { name: "Adult Dog Food — Chicken 5kg", slug: "adult-dog-food-chicken-5kg", price: 129900, category: "Food", description: "Complete and balanced kibble.", featured: true, stock: 20, tags: ["bestseller"] },
       { name: "Cat Tuna Treats", slug: "cat-tuna-treats", price: 24900, category: "Food", description: "Soft treats with real tuna.", stock: 45 },
       { name: "Rope Tug Toy", slug: "rope-tug-toy", price: 34900, category: "Toys", description: "Cotton rope for aggressive chewers.", stock: 30 },
       { name: "Full Grooming Session", slug: "full-grooming-session", price: 85000, category: "Grooming", description: "Bath, haircut, nail trim and ear cleaning.", type: "service", durationMinutes: 90, featured: true, stock: 0 },
+      { name: "Wet Cat Food — Tuna 400g", slug: "wet-cat-food-tuna-400g", price: 8900, category: "Food", description: "Complete meal in gravy with real tuna.", stock: 60 },
+      { name: "Puppy Food — Chicken 3kg", slug: "puppy-food-chicken-3kg", price: 79900, category: "Food", description: "Small-bite kibble for puppies up to 12 months.", featured: true, stock: 14, tags: ["bestseller"] },
+      { name: "Dental Chews (7-pack)", slug: "dental-chews-7-pack", price: 27900, category: "Food", description: "Daily chews that reduce plaque and tartar.", stock: 26 },
+      { name: "Cat Scratcher Board", slug: "cat-scratcher-board", price: 54900, category: "Toys", description: "Corrugated scratch pad with catnip included.", stock: 16 },
+      { name: "Squeaky Ball", slug: "squeaky-ball", price: 19900, category: "Toys", description: "Natural rubber ball that squeaks on every bounce.", stock: 34 },
+      { name: "Flea & Tick Shampoo", slug: "flea-tick-shampoo", price: 34900, category: "Grooming", description: "Gentle formula that kills fleas for up to 7 days.", stock: 18 },
+      { name: "Retractable Leash 5m", slug: "retractable-leash-5m", price: 44900, category: "Accessories", description: "One-button brake leash for walks up to 30kg.", stock: 20 },
+      { name: "Clumping Cat Litter 5L", slug: "clumping-cat-litter-5l", price: 39900, category: "Accessories", description: "Low-dust clumping litter with odor lock.", stock: 22 },
     ],
     customers: [
       { first: "Miguel", last: "Ocampo", email: "miguel.ocampo@example.com", phone: "+639173334444" },
@@ -192,13 +229,21 @@ const DEMO_STORES: DemoStore[] = [
     slug: "sample-salon",
     businessType: "salon",
     description: "Cuts, color and treatments by appointment.",
+    promo: "Book this week and get 20% off your first visit · Walk-ins welcome before noon",
     attributes: [{ name: "Length", values: ["Short", "Medium", "Long"] }],
-    categories: ["Hair", "Treatment"],
+    categories: ["Hair", "Treatment", "Nails", "Packages"],
     products: [
       { name: "Signature Haircut", slug: "signature-haircut", price: 45000, category: "Hair", description: "Consultation, cut and style.", type: "service", durationMinutes: 45, featured: true, stock: 0 },
       { name: "Hair Color — Full", slug: "hair-color-full", price: 180000, category: "Hair", description: "Ammonia-free color with gloss finish.", type: "service", durationMinutes: 120, stock: 0 },
       { name: "Keratin Treatment", slug: "keratin-treatment", price: 250000, category: "Treatment", description: "Smoothing treatment for frizz control.", type: "service", durationMinutes: 150, stock: 0 },
       { name: "Argan Hair Oil 50ml", slug: "argan-hair-oil-50ml", price: 59900, category: "Treatment", description: "Leave-in finishing oil.", stock: 15 },
+      { name: "Blowout Styling", slug: "blowout-styling", price: 35000, category: "Hair", description: "Wash and blow-dry with your choice of finish.", type: "service", durationMinutes: 30, stock: 0 },
+      { name: "Haircut + Beard Trim", slug: "haircut-beard-trim", price: 55000, category: "Hair", description: "Precision cut with hot-towel beard trim.", type: "service", durationMinutes: 45, stock: 0 },
+      { name: "Scalp Detox Treatment", slug: "scalp-detox-treatment", price: 60000, category: "Treatment", description: "Deep-cleansing scalp ritual with massage.", type: "service", durationMinutes: 45, featured: true, stock: 0, tags: ["popular"] },
+      { name: "Rebond", slug: "rebond", price: 250000, category: "Treatment", description: "Straightening treatment with aftercare kit.", type: "service", durationMinutes: 180, stock: 0 },
+      { name: "Manicure & Pedicure", slug: "manicure-pedicure", price: 45000, category: "Nails", description: "Full nail care with gel polish option.", type: "service", durationMinutes: 60, stock: 0 },
+      { name: "Foot Spa", slug: "foot-spa", price: 45000, category: "Nails", description: "Soak, scrub and massage for tired feet.", type: "service", durationMinutes: 45, stock: 0 },
+      { name: "Bridal Hair & Makeup", slug: "bridal-hair-makeup", price: 350000, category: "Packages", description: "Trial session plus day-of styling for the bride.", type: "service", durationMinutes: 150, featured: true, stock: 0, tags: ["popular"] },
     ],
     customers: [
       { first: "Nica", last: "Bautista", email: "nica.bautista@example.com", phone: "+639176667777" },
@@ -247,14 +292,28 @@ const PLANS = [
   },
 ];
 
-function demoSections(name: string) {
+function demoSections(demo: DemoStore) {
+  const year = new Date().getFullYear();
   return [
-    { id: crypto.randomUUID(), type: "announcement", enabled: true, settings: { text: "Demo store — sample data only" } },
-    { id: crypto.randomUUID(), type: "hero", enabled: true, settings: { heading: name, subheading: "Demo storefront built on Jorify", buttonLabel: "Shop now", buttonHref: "/products" } },
-    { id: crypto.randomUUID(), type: "featured_products", enabled: true, settings: { title: "Featured", limit: 8 } },
+    { id: crypto.randomUUID(), type: "announcement", enabled: true, settings: { text: demo.promo } },
+    {
+      id: crypto.randomUUID(),
+      type: "hero",
+      enabled: true,
+      settings: { heading: demo.store, subheading: demo.description, buttonLabel: "Shop now", buttonHref: "/products" },
+    },
+    { id: crypto.randomUUID(), type: "featured_products", enabled: true, settings: { title: "Bestsellers", limit: 8 } },
     { id: crypto.randomUUID(), type: "categories", enabled: true, settings: { title: "Shop by category" } },
-    { id: crypto.randomUUID(), type: "about", enabled: true, settings: { title: "About", body: "This is demo data generated by the seed script." } },
-    { id: crypto.randomUUID(), type: "footer", enabled: true, settings: { text: "Demo data · Jorify" } },
+    {
+      id: crypto.randomUUID(),
+      type: "about",
+      enabled: true,
+      settings: {
+        title: `About ${demo.store}`,
+        body: `${demo.description} Order online for pickup or delivery — payments are handled securely at checkout.`,
+      },
+    },
+    { id: crypto.randomUUID(), type: "footer", enabled: true, settings: { text: `© ${year} ${demo.store} · Powered by Jorify` } },
   ];
 }
 
@@ -324,7 +383,7 @@ async function main() {
       title: "Home",
       slug: "home",
       isHomepage: true,
-      sections: demoSections(demo.store),
+      sections: demoSections(demo),
       published: true,
       seo: { title: demo.store, description: demo.description },
     });
@@ -334,7 +393,15 @@ async function main() {
         title: "About",
         slug: "about",
         sections: [
-          { id: crypto.randomUUID(), type: "about", enabled: true, settings: { title: `About ${demo.store}`, body: demo.description } },
+          {
+            id: crypto.randomUUID(),
+            type: "about",
+            enabled: true,
+            settings: {
+              title: `About ${demo.store}`,
+              body: `${demo.description} Order online for pickup or delivery — payments are handled securely at checkout.`,
+            },
+          },
         ],
         published: true,
         seo: { title: `About ${demo.store}`, description: demo.description },

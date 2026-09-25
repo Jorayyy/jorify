@@ -46,15 +46,19 @@ describeDb("tenant isolation (live database)", () => {
   let state!: Loaded;
 
   beforeAll(async () => {
-    const rows = await db
+    const joined = await db
       .select({ store: stores, organization: organizations })
       .from(stores)
       .innerJoin(organizations, eq(organizations.id, stores.organizationId))
-      .where(isNull(stores.deletedAt))
-      .limit(2);
+      .innerJoin(products, eq(products.storeId, stores.id))
+      .where(isNull(stores.deletedAt));
 
-    const [a, b] = rows;
-    if (!a || !b) throw new Error("Seed at least two stores before running this test");
+    const byOrganization = new Map<string, { store: typeof stores.$inferSelect; organization: typeof organizations.$inferSelect }>();
+    for (const row of joined) {
+      if (!byOrganization.has(row.organization.id)) byOrganization.set(row.organization.id, row);
+    }
+    const [a, b] = [...byOrganization.values()];
+    if (!a || !b) throw new Error("Seed at least two stores with products before running this test");
 
     const existing = await db.query.users.findFirst({ where: eq(users.email, TEST_EMAIL) });
     const [member] = existing

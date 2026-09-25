@@ -1,6 +1,6 @@
 "use client";
 
-import { Command, LogOut, Menu, ShoppingBag, X } from "lucide-react";
+import { BarChart3, Command, LayoutGrid, LogOut, Menu, ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
@@ -97,6 +97,22 @@ export function Sidebar({
         </div>
         {nav}
         <div className="border-t border-zinc-100 p-3">
+          <div className="mb-2 flex items-center gap-1">
+            <Link
+              href="/dashboard"
+              className="flex flex-1 items-center gap-1.5 rounded-md border border-zinc-200 px-2 py-1.5 text-xs text-zinc-600 hover:bg-zinc-50"
+            >
+              <BarChart3 className="h-3.5 w-3.5" />
+              Dashboard
+            </Link>
+            <Link
+              href="/stores"
+              className="flex flex-1 items-center gap-1.5 rounded-md border border-zinc-200 px-2 py-1.5 text-xs text-zinc-600 hover:bg-zinc-50"
+            >
+              <LayoutGrid className="h-3.5 w-3.5" />
+              Stores
+            </Link>
+          </div>
           <button
             onClick={() => setCommandOpen(true)}
             className="mb-2 flex w-full items-center gap-2 rounded-md border border-zinc-200 px-2.5 py-1.5 text-xs text-zinc-500 hover:bg-zinc-50"
@@ -128,6 +144,22 @@ export function Sidebar({
             </div>
             {nav}
             <div className="border-t border-zinc-100 p-3">
+              <div className="mb-2 flex items-center gap-1">
+                <Link
+                  href="/dashboard"
+                  className="flex flex-1 items-center gap-1.5 rounded-md border border-zinc-200 px-2 py-1.5 text-xs text-zinc-600 hover:bg-zinc-50"
+                >
+                  <BarChart3 className="h-3.5 w-3.5" />
+                  Dashboard
+                </Link>
+                <Link
+                  href="/stores"
+                  className="flex flex-1 items-center gap-1.5 rounded-md border border-zinc-200 px-2 py-1.5 text-xs text-zinc-600 hover:bg-zinc-50"
+                >
+                  <LayoutGrid className="h-3.5 w-3.5" />
+                  Stores
+                </Link>
+              </div>
               <form action={logoutAction}>
                 <button type="submit" className="flex items-center gap-2 text-sm text-zinc-600">
                   <LogOut className="h-4 w-4" /> Sign out

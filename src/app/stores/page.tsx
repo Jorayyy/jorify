@@ -1,14 +1,13 @@
-import { and, inArray, isNull } from "drizzle-orm";
+import Link from "next/link";
 import { Store } from "lucide-react";
 import { createStoreFormAction } from "@/lib/actions/auth";
 import { BUSINESS_TYPES, getBusinessType } from "@/lib/business-types";
-import { db } from "@/lib/db";
-import { stores } from "@/lib/db/schema";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Select } from "@/components/ui/input";
 import { EmptyState } from "@/components/ui/skeleton";
-import { listUserOrganizations, requireUser } from "@/lib/tenancy/context";
-import { timeAgo } from "@/lib/utils";
+import { listOwnedStores, salesByStore } from "@/lib/services/platform";
+import { requireUser } from "@/lib/tenancy/context";
+import { formatMoney, timeAgo } from "@/lib/utils";
 
 export default async function StoresPage({
   searchParams,
@@ -17,25 +16,39 @@ export default async function StoresPage({
 }) {
   const { error } = await searchParams;
   const user = await requireUser();
-  const memberships = await listUserOrganizations(user.id);
-  const organizationIds = memberships.map((row) => row.organization.id);
+  const storeRows = await listOwnedStores(user.id);
 
-  const storeRows = organizationIds.length
-    ? await db
-        .select()
-        .from(stores)
-        .where(and(inArray(stores.organizationId, organizationIds), isNull(stores.deletedAt)))
-    : [];
+  const from = new Date();
+  from.setDate(from.getDate() - 29);
+  from.setHours(0, 0, 0, 0);
+  const to = new Date();
+  to.setHours(23, 59, 59, 999);
+  const sales = await salesByStore(
+    storeRows.map((store) => store.id),
+    from,
+    to,
+  );
+  const salesMap = new Map(sales.map((row) => [row.storeId, row]));
+  const totalRevenue = sales.reduce((sum, row) => sum + row.revenue, 0);
+  const totalOrders = sales.reduce((sum, row) => sum + row.count, 0);
 
-  const primaryOrg = organizationIds[0];
+  const primaryOrg = storeRows[0]?.organizationId;
 
   return (
     <div className="min-h-screen bg-zinc-50">
       <header className="border-b border-zinc-200 bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-2 text-sm font-semibold">
-            <span className="flex h-6 w-6 items-center justify-center rounded bg-zinc-900 text-xs text-white">J</span>
-            Jorify
+          <div className="flex items-center gap-4">
+            <Link href="/stores" className="flex items-center gap-2 text-sm font-semibold">
+              <span className="flex h-6 w-6 items-center justify-center rounded bg-zinc-900 text-xs text-white">J</span>
+              Jorify
+            </Link>
+            <nav className="flex items-center gap-1 text-sm">
+              <Link href="/dashboard" className="rounded-md px-2.5 py-1 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900">
+                Dashboard
+              </Link>
+              <span className="rounded-md bg-zinc-900 px-2.5 py-1 font-medium text-white">Stores</span>
+            </nav>
           </div>
           <span className="text-sm text-zinc-500">{user.email}</span>
         </div>
@@ -46,9 +59,30 @@ export default async function StoresPage({
         <p className="mt-1 text-sm text-zinc-500">Switch between stores, or create another one.</p>
         {error ? <p className="mt-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p> : null}
 
+        {storeRows.length > 0 ? (
+          <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-lg border border-zinc-200 bg-white px-4 py-3">
+            <div>
+              <p className="text-[11px] uppercase tracking-wide text-zinc-400">Revenue · last 30 days</p>
+              <p className="text-lg font-semibold text-zinc-900">{formatMoney(totalRevenue, "PHP")}</p>
+            </div>
+            <div>
+              <p className="text-[11px] uppercase tracking-wide text-zinc-400">Orders</p>
+              <p className="text-lg font-semibold text-zinc-900">{totalOrders}</p>
+            </div>
+            <div>
+              <p className="text-[11px] uppercase tracking-wide text-zinc-400">Stores</p>
+              <p className="text-lg font-semibold text-zinc-900">{storeRows.length}</p>
+            </div>
+            <Link href="/dashboard" className="ml-auto text-sm font-medium text-zinc-900 hover:underline">
+              View sales dashboard →
+            </Link>
+          </div>
+        ) : null}
+
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {storeRows.map((store) => {
             const type = getBusinessType(store.businessType);
+            const storeSales = salesMap.get(store.id);
             return (
               <a
                 key={store.id}
@@ -66,7 +100,11 @@ export default async function StoresPage({
                     </p>
                   </div>
                 </div>
-                <p className="mt-3 flex items-center justify-between text-xs text-zinc-400">
+                <p className="mt-3 flex items-baseline justify-between text-xs">
+                  <span className="text-lg font-semibold text-zinc-900">{formatMoney(storeSales?.revenue ?? 0, store.currency)}</span>
+                  <span className="text-zinc-500">{storeSales?.count ?? 0} orders · 30d</span>
+                </p>
+                <p className="mt-2 flex items-center justify-between text-xs text-zinc-400">
                   <span>{store.status === "active" ? "Active" : store.status}</span>
                   <span>updated {timeAgo(store.updatedAt)}</span>
                 </p>
